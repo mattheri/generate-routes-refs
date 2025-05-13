@@ -7,7 +7,7 @@ describe("generate-ref", () => {
 
   beforeEach(() => {
     route = {
-      file: "test.ts",
+      file: "./test.ts",
       path: "?locale/test",
     };
 

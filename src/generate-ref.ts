@@ -6,19 +6,16 @@ export const generateRef = async (
   route: RouteConfigEntry
 ): Promise<RouteReference> => {
   let handle: unknown = undefined;
+  const file = route.file.replace(/^\.\//, "");
 
   try {
-    const module = await viteImport(route.file);
+    const module = await viteImport(file);
     handle = module.handle;
-  } catch {
-    console.error(
-      `Error importing module ${route.file}. Please check the file path and ensure it exists.`
-    );
-  }
+  } catch {}
 
   return {
     handle,
-    id: route.file.replace(/\.ts$|\.tsx$/, ""),
+    id: file.replace(/\.ts$|\.tsx$/, ""),
     path: route.path,
   };
 };
