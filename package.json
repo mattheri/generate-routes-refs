@@ -28,6 +28,8 @@
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "ci": "npm run build && npm run check-exports && npm run test",
     "dev": "vitest",
+    "local-release": "changeset version && changeset publish",
+    "prepublishOnly": "npm run ci",
     "test": "vitest run"
   },
   "type": "module",
