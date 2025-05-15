@@ -1,5 +1,11 @@
 # generate-routes-refs
 
+## 0.0.4
+
+### Patch Changes
+
+- d90f8f2: Remove support form importing handle
+
 ## 0.0.3
 
 ### Patch Changes
