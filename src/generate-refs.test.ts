@@ -41,8 +41,8 @@ describe("generate-refs", () => {
     vi.restoreAllMocks();
   });
 
-  it("should call generateRef for each route when it has a path", async () => {
-    await generateRefs(routes);
+  it("should call generateRef for each route when it has a path", () => {
+    generateRefs(routes);
 
     for (const route of routes) {
       if (route.path) {

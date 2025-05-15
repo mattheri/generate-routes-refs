@@ -8,7 +8,7 @@ export const generateRoutesRef = async (
   options: Options = {}
 ): Promise<RouteConfig> => {
   const config = await routesConfig;
-  const routes: RouteReference[] = await generateRefs(config);
+  const routes: RouteReference[] = generateRefs(config);
 
   write(routes, options);
 

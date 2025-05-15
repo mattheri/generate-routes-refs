@@ -1,21 +1,11 @@
 import type { RouteConfigEntry } from "@react-router/dev/routes";
 import type { RouteReference } from "./types.js";
-import { viteImport } from "./vite-import.js";
 
-export const generateRef = async (
-  route: RouteConfigEntry
-): Promise<RouteReference> => {
-  let handle: unknown = undefined;
-  const file = route.file.replace(/^\.\//, "");
-
-  try {
-    const module = await viteImport(file);
-    handle = module.handle;
-  } catch {}
+export const generateRef = (route: RouteConfigEntry): RouteReference => {
+  const file = route.file.replace(/^\.\//, "").replace(/\.ts$|\.tsx$/, "");
 
   return {
-    handle,
-    id: file.replace(/\.ts$|\.tsx$/, ""),
+    id: route.id || file,
     path: route.path,
   };
 };

@@ -1,5 +1,4 @@
 export interface RouteReference {
-  handle?: unknown;
   id: string;
   path?: string;
 }
