@@ -1,5 +1,11 @@
 # generate-routes-refs
 
+## 0.0.7
+
+### Patch Changes
+
+- 60a9163: Change route.path to route.file
+
 ## 0.0.6
 
 ### Patch Changes
