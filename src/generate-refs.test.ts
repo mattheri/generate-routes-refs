@@ -41,14 +41,14 @@ describe("generate-refs", () => {
     vi.restoreAllMocks();
   });
 
-  it("should call generateRef for each route when it has a path", () => {
-    generateRefs(routes);
+  it("should call generateRef for each route when it has a path", async () => {
+    await generateRefs(routes);
 
     for (const route of routes) {
       if (route.path) {
-        expect(generateRefSpy).toHaveBeenCalledWith(route);
+        expect(await generateRefSpy).toHaveBeenCalledWith(route, undefined);
       } else {
-        expect(generateRefSpy).not.toHaveBeenCalledWith(route);
+        expect(await generateRefSpy).not.toHaveBeenCalledWith(route, undefined);
       }
     }
   });
