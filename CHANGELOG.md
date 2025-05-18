@@ -1,5 +1,13 @@
 # generate-routes-refs
 
+## 0.0.5
+
+### Patch Changes
+
+- 18f9389: Testing new script
+- 5de0c66: Adding new script
+- 7e29059: Add routeMetadata option
+
 ## 0.0.4
 
 ### Patch Changes
