@@ -1,11 +1,15 @@
 import type { RouteConfigEntry } from "@react-router/dev/routes";
-import type { RouteReference } from "./types.js";
+import type { Options, RouteReference } from "./types.js";
 
-export const generateRef = (route: RouteConfigEntry): RouteReference => {
+export const generateRef = async (
+  route: RouteConfigEntry,
+  routeMetadataFn?: Options["routeMetadata"]
+): Promise<RouteReference> => {
   const file = route.file.replace(/^\.\//, "").replace(/\.ts$|\.tsx$/, "");
 
   return {
     id: route.id || file,
     path: route.path,
+    metadata: routeMetadataFn ? await routeMetadataFn(route.path) : undefined,
   };
 };
