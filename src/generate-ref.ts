@@ -10,6 +10,6 @@ export const generateRef = async (
   return {
     id: route.id || file,
     path: route.path,
-    metadata: routeMetadataFn ? await routeMetadataFn(route.path) : undefined,
+    metadata: routeMetadataFn ? await routeMetadataFn(route.file) : undefined,
   };
 };
