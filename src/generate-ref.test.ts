@@ -1,45 +1,80 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { RouteConfigEntry } from "@react-router/dev/routes";
+import { describe, expect, it, vi } from "vitest";
 import { generateRef } from "./generate-ref.js";
+import { getRouteParams } from "./get-route-params.js";
 
-describe("generate-ref", () => {
-  let importWithViteSpy: any, route: any;
+vi.mock("./get-route-params.js");
 
-  beforeEach(() => {
-    route = {
-      file: "./test.ts",
-      path: "?locale/test",
+describe("generateRef", () => {
+  it("should generate a basic route reference", async () => {
+    const route: RouteConfigEntry = {
+      file: "./routes/home.tsx",
+      path: "/",
     };
-  });
+    vi.mocked(getRouteParams).mockReturnValue([]);
 
-  it("should remove .ts or .tsx from the file name to create an id", async () => {
-    route.file = "test.tsx";
-    const result = await generateRef(route);
+    const ref = await generateRef(route);
 
-    expect(result).toEqual({
+    expect(ref).toEqual({
+      id: "routes/home",
       metadata: undefined,
-      id: "test",
-      path: "?locale/test",
+      path: "/",
+      params: [],
     });
   });
 
-  it("should run the routeMetadata function if provided", async () => {
-    const routeMetadataFn = async () => {
-      return {
-        title: "Test Title",
-        description: "Test Description",
-      };
+  it("should use the route id if provided", async () => {
+    const route: RouteConfigEntry = {
+      id: "custom-id",
+      file: "./routes/about.tsx",
+      path: "/about",
     };
-    const routeMetadataFnSpy = vi.fn(routeMetadataFn);
+    vi.mocked(getRouteParams).mockReturnValue([]);
 
-    const result = await generateRef(route, routeMetadataFnSpy);
-    expect(result).toEqual({
-      metadata: {
-        title: "Test Title",
-        description: "Test Description",
-      },
-      id: "test",
-      path: "?locale/test",
+    const ref = await generateRef(route);
+
+    expect(ref).toEqual({
+      id: "custom-id",
+      metadata: undefined,
+      path: "/about",
+      params: [],
     });
-    expect(routeMetadataFnSpy).toHaveBeenCalledWith("./test.ts");
+  });
+
+  it("should call routeMetadataFn and include metadata", async () => {
+    const route: RouteConfigEntry = {
+      file: "./routes/profile.tsx",
+      path: "/profile",
+    };
+    const routeMetadataFn = vi.fn().mockResolvedValue({ some: "data" });
+    vi.mocked(getRouteParams).mockReturnValue([]);
+
+    const ref = await generateRef(route, routeMetadataFn);
+
+    expect(routeMetadataFn).toHaveBeenCalledWith("./routes/profile.tsx");
+    expect(ref).toEqual({
+      id: "routes/profile",
+      metadata: { some: "data" },
+      path: "/profile",
+      params: [],
+    });
+  });
+
+  it("should handle routes with parameters", async () => {
+    const route: RouteConfigEntry = {
+      file: "./routes/users/[id].tsx",
+      path: "/users/:id",
+    };
+    const params = [{ name: "id", optional: false }];
+    vi.mocked(getRouteParams).mockReturnValue(params);
+
+    const ref = await generateRef(route);
+
+    expect(ref).toEqual({
+      id: "routes/users/[id]",
+      metadata: undefined,
+      path: "/users/:id",
+      params,
+    });
   });
 });

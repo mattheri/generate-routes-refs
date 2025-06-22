@@ -1,61 +1,72 @@
 import type { RouteConfigEntry } from "@react-router/dev/routes";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import * as __generateRef from "./generate-ref.js";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { generateRef } from "./generate-ref.js";
 import { generateRefs } from "./generate-refs.js";
+import type { RouteReference } from "./types.js";
 
-describe("generate-refs", () => {
-  let generateRefSpy: any, generateRefsSpy: any, routes: RouteConfigEntry[];
+vi.mock("./generate-ref.js");
 
-  beforeEach(() => {
-    generateRefSpy = vi.spyOn(__generateRef, "generateRef");
-    generateRefsSpy = vi.spyOn({ generateRefs }, "generateRefs");
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
-    routes = [
+describe("generateRefs", () => {
+  it("should generate references for a flat list of routes", async () => {
+    const routes: RouteConfigEntry[] = [
+      { file: "a.ts", path: "/a" },
+      { file: "b.ts", path: "/b" },
+    ];
+    const mockRefA: RouteReference = { id: "a", path: "/a" };
+    const mockRefB: RouteReference = { id: "b", path: "/b" };
+
+    vi.mocked(generateRef)
+      .mockResolvedValueOnce(mockRefA)
+      .mockResolvedValueOnce(mockRefB);
+
+    const refs = await generateRefs(routes);
+    expect(vi.mocked(generateRef)).toHaveBeenCalledTimes(2);
+    expect(refs).toEqual([mockRefA, mockRefB]);
+  });
+
+  it("should handle nested routes", async () => {
+    const routes: RouteConfigEntry[] = [
       {
-        file: "layout-test.ts",
-      },
-      {
-        file: "test.ts",
-        id: "test",
-        path: "?locale/test",
-      },
-      {
-        file: "test-children.ts",
-        id: "test-children",
-        path: "?locale/test-children",
-        children: [
-          {
-            file: "test-children-1.ts",
-            id: "test-children-1",
-          },
-          {
-            file: "test-children-2.ts",
-            id: "test-children-2",
-          },
-        ],
+        file: "parent.ts",
+        path: "/parent",
+        children: [{ file: "child.ts", path: "child" }],
       },
     ];
+    const mockRefParent: RouteReference = { id: "parent", path: "/parent" };
+    const mockRefChild: RouteReference = { id: "child", path: "child" };
+
+    vi.mocked(generateRef)
+      .mockResolvedValueOnce(mockRefParent)
+      .mockResolvedValueOnce(mockRefChild);
+
+    const refs = await generateRefs(routes);
+    expect(vi.mocked(generateRef)).toHaveBeenCalledTimes(2);
+    expect(refs).toEqual([mockRefParent, mockRefChild]);
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  it("should handle an empty array of routes", async () => {
+    const routes: RouteConfigEntry[] = [];
+    const refs = await generateRefs(routes);
+    expect(refs).toEqual([]);
+    expect(vi.mocked(generateRef)).not.toHaveBeenCalled();
   });
 
-  it("should call generateRef for each route when it has a path", async () => {
-    await generateRefs(routes);
+  it("should skip routes without a path but process their children", async () => {
+    const routes: RouteConfigEntry[] = [
+      {
+        file: "layout.ts",
+        children: [{ file: "child.ts", path: "/child" }],
+      },
+    ];
+    const mockRefChild: RouteReference = { id: "child", path: "/child" };
+    vi.mocked(generateRef).mockResolvedValueOnce(mockRefChild);
 
-    for (const route of routes) {
-      if (route.path) {
-        expect(await generateRefSpy).toHaveBeenCalledWith(route, undefined);
-      } else {
-        expect(await generateRefSpy).not.toHaveBeenCalledWith(route, undefined);
-      }
-    }
-  });
-
-  it("should call generateRefs recursively for child routes", async () => {
-    await generateRefsSpy(routes, undefined);
-
-    expect(await generateRefsSpy).toHaveBeenCalledWith(routes, undefined);
+    const refs = await generateRefs(routes);
+    expect(vi.mocked(generateRef)).toHaveBeenCalledTimes(1);
+    expect(refs).toEqual([mockRefChild]);
   });
 });

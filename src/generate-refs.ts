@@ -17,6 +17,6 @@ export const generateRefs = async (
         ...(await generateRefs(route.children, routeMetadataFn))
       );
     }
-    return acc;
+    return accumulator;
   }, Promise.resolve([]));
 };
