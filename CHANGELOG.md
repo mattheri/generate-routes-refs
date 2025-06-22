@@ -1,5 +1,11 @@
 # generate-routes-refs
 
+## 0.0.9
+
+### Patch Changes
+
+- 19acaab: Add route params type
+
 ## 0.0.8
 
 ### Patch Changes
