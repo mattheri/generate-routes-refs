@@ -34,7 +34,7 @@
     "test": "vitest run"
   },
   "type": "module",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "dependencies": {
     "upath": "^2.0.1"
   }

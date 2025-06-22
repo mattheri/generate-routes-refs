@@ -1,5 +1,11 @@
 # generate-routes-refs
 
+## 0.0.13
+
+### Patch Changes
+
+- da6af48: prettify params
+
 ## 0.0.12
 
 ### Patch Changes
