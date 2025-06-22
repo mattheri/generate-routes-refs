@@ -15,7 +15,7 @@ export const EXPORTS = [
   >
 > = {
   [K in keyof T]: Prettify<Omit<T[K], "params"> & {
-    readonlyparams: ParamsObject<
+    readonly params: ParamsObject<
       T[K]["params"] extends readonly RouteParam[] ? T[K]["params"] : []
     >;
   }>;
