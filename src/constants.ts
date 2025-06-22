@@ -1,4 +1,5 @@
 export const EXPORTS = [
+  "import type { JsonSerializable } from 'generate-routes-refs';",
   "export const routes = $$ as const;",
   "type Prettify<T> = {[K in keyof T]: T[K];} & {};",
   "type RouteParam = { name: string; optional: boolean };",
