@@ -13,13 +13,13 @@ export const EXPORTS = [
       metadata?: JsonSerializable;
     }
   >
-> = Prettify<{
-  [K in keyof T]: Omit<T[K], "params"> & {
-    params: ParamsObject<
+> = {
+  [K in keyof T]: Prettify<Omit<T[K], "params"> & {
+    readonlyparams: ParamsObject<
       T[K]["params"] extends readonly RouteParam[] ? T[K]["params"] : []
     >;
-  };
-}>;`,
+  }>;
+};`,
   "export type Routes = RoutesWithParams<typeof routes>",
   "export type Route = keyof Routes & (string | {});",
   "export type RouteRef<T extends Route> = Routes[T] extends object ? Routes[T] : never;",
