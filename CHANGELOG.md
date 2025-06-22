@@ -1,5 +1,11 @@
 # generate-routes-refs
 
+## 0.0.8
+
+### Patch Changes
+
+- 9f65ac4: Add route params
+
 ## 0.0.7
 
 ### Patch Changes
