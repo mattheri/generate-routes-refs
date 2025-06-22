@@ -1,5 +1,11 @@
 # generate-routes-refs
 
+## 0.0.14
+
+### Patch Changes
+
+- 6035b71: dammit
+
 ## 0.0.13
 
 ### Patch Changes
