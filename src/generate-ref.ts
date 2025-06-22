@@ -1,4 +1,5 @@
 import type { RouteConfigEntry } from "@react-router/dev/routes";
+import { getRouteParams } from "./get-route-params.js";
 import type { Options, RouteReference } from "./types.js";
 
 export const generateRef = async (
@@ -9,7 +10,8 @@ export const generateRef = async (
 
   return {
     id: route.id || file,
-    path: route.path,
     metadata: routeMetadataFn ? await routeMetadataFn(route.file) : undefined,
+    path: route.path,
+    params: getRouteParams(route),
   };
 };

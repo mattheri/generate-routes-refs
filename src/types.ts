@@ -2,6 +2,7 @@ export interface RouteReference {
   id: string;
   metadata?: JsonSerializable;
   path?: string;
+  params?: RouteParam[];
 }
 
 export interface RouteReferences {
@@ -25,4 +26,9 @@ export interface Options {
   fileType?: "ts" | "js";
   removeFromRouteKey?: string | RegExp;
   routeMetadata?: RouteMetadataFn;
+}
+
+export interface RouteParam {
+  name: string;
+  optional: boolean;
 }

@@ -52,4 +52,10 @@ describe("generate-refs", () => {
       }
     }
   });
+
+  it("should call generateRefs recursively for child routes", async () => {
+    await generateRefsSpy(routes, undefined);
+
+    expect(await generateRefsSpy).toHaveBeenCalledWith(routes, undefined);
+  });
 });

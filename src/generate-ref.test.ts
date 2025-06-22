@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { generateRef } from "./generate-ref.js";
 
 describe("generate-ref", () => {
@@ -29,8 +29,9 @@ describe("generate-ref", () => {
         description: "Test Description",
       };
     };
+    const routeMetadataFnSpy = vi.fn(routeMetadataFn);
 
-    const result = await generateRef(route, routeMetadataFn);
+    const result = await generateRef(route, routeMetadataFnSpy);
     expect(result).toEqual({
       metadata: {
         title: "Test Title",
@@ -39,5 +40,6 @@ describe("generate-ref", () => {
       id: "test",
       path: "?locale/test",
     });
+    expect(routeMetadataFnSpy).toHaveBeenCalledWith("./test.ts");
   });
 });
