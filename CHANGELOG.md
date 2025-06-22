@@ -1,5 +1,11 @@
 # generate-routes-refs
 
+## 0.0.12
+
+### Patch Changes
+
+- 8aee239: goddammit forgot a single s
+
 ## 0.0.11
 
 ### Patch Changes
