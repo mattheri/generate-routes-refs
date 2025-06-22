@@ -1,5 +1,11 @@
 # generate-routes-refs
 
+## 0.0.10
+
+### Patch Changes
+
+- 8b482db: handle routes with params
+
 ## 0.0.9
 
 ### Patch Changes
