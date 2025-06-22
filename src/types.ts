@@ -55,3 +55,45 @@ export type ParamsObject<T extends readonly RouteParam[]> = Prettify<
     [P in Extract<T[number], { optional: true }>["name"]]?: string;
   }
 >;
+
+/**
+ * Transforms the `params` property of each route in a `RouteReferences` object
+ * from an array of `RouteParam` to an object using `ParamsObject`.
+ * @example
+ * const routes = {
+ *   "households": {
+ *     "id": "households", "path": "/households/:id",
+ *     "params": [{ "name": "id", "optional": false }]
+ *   },
+ *   "products": {
+ *     "id": "products", "path": "/products/:productId/color/:color?",
+ *     "params": [
+ *       { "name": "productId", "optional": false },
+ *       { "name": "color", "optional": true }
+ *     ]
+ *   }
+ * } as const;
+ * type TransformedRoutes = RoutesWithParams<typeof routes>;
+ * // TransformedRoutes is:
+ * // {
+ * //   households: { id: "households"; path: "..."; params: { id: string; }; };
+ * //   products: { id: "products"; path: "..."; params: { productId: string; color?: string; }; };
+ * // }
+ */
+export type RoutesWithParams<
+  T extends Record<
+    string,
+    {
+      id: string;
+      path?: string;
+      params?: readonly RouteParam[];
+      metadata?: JsonSerializable;
+    }
+  >
+> = Prettify<{
+  [K in keyof T]: Omit<T[K], "params"> & {
+    params: ParamsObject<
+      T[K]["params"] extends readonly RouteParam[] ? T[K]["params"] : []
+    >;
+  };
+}>;
